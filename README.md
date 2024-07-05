@@ -1,2 +1,9 @@
 # nilam-an-online-auction-system '
-* Sopnil Roy Niloy
+
+---
+## Group Members:
+ - Rejwan Shafi
+ - Homairah Ferdousia
+ - Niloy Roy
+ - Afif Rayhan Pranto
+ 
