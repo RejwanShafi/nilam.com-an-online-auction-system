@@ -36,11 +36,11 @@
                     echo '<tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">';
                     foreach ($users as $user) {
                         echo '<tr>';
-                        echo '<td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">' . $user->user_id . '</td>';
-                        echo '<td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">' . $user->username . '</td>';
+                        echo '<td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">' . $user->id . '</td>';
+                        echo '<td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">' . $user->name . '</td>';
                         echo '<td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">' . $user->email . '</td>';
                         echo '<td class="px-6 py-4 whitespace-nowrap">';
-                        echo '<form action="' . route('users.delete', $user->user_id) . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this user?\');">';
+                        echo '<form action="' . route('users.delete', $user->id) . '" method="POST" onsubmit="return confirm(\'Are you sure you want to delete this user?\');">';
                         echo csrf_field();
                         echo '<input type="hidden" name="_method" value="DELETE">';
                         echo '<button type="submit" class="text-red-600 hover:text-red-900">Delete</button>';

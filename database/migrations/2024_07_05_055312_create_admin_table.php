@@ -11,11 +11,12 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('admins', function (Blueprint $table) {
-            $table->id('admin_id'); // Foreign key referencing users.user_id
+            $table->id();
+            $table->unsignedBigInteger('admin_id'); // Foreign key referencing users.user_id
             $table->string('admin_name');
             $table->timestamps();
 
-            $table->foreign('admin_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

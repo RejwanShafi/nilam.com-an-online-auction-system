@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customer', function (Blueprint $table) {
-            $table->id("customer_id"); // Foreign key referencing users.user_id
+            $table->id();
+            $table->unsignedBigInteger('customer_id') ;// Foreign key referencing users.user_id
             $table->string("customer_name");
             $table->string("phone_number");
             $table->timestamps();
 
-            $table->foreign('customer_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
