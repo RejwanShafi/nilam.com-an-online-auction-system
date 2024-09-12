@@ -52,7 +52,7 @@
         .btn-logout {
             background-color: red;
             color: white;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 10px 15px;
             font-size: 14px;
         }
@@ -104,15 +104,19 @@
                 <a href="{{ route('admin.add') }}" class="nav-link {{ request()->is('admin/add') ? 'active' : '' }}">Add New Admin</a>
             </li>
             <li class="nav-item mt-3">
-                <a href="#">Auction</a>
+                <a href="#">Auction Approval</a>
             </li>
+            <li class="nav-item mt-3">
+                <a href="#">Auction Status</a>
+            </li>
+
             <li class="nav-item mt-3">
                 <a href="#">Bidding</a>
             </li>
             <li class="nav-item mt-3">
                 <a href="{{ route('profile.update') }}" class="btn btn-outline-secondary w-100">Update Profile</a>
             </li>
-            <li class="nav-item mt-3">
+            <li class="nav-item mt-5">
                 <!-- Logout Form -->
                 <form method="POST" action="{{ route('logout') }}" class="d-inline w-100">
                     @csrf
@@ -125,14 +129,14 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Top Navigation Bar -->
-        <nav class="navbar navbar-light bg-light">
+        <!-- <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <form class="d-flex me-auto">
                     <input class="form-control me-2 form-control-search" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-primary btn-search" type="submit">Search</button>
                 </form>
             </div>
-        </nav>
+        </nav> -->
 
         <!-- Main Dashboard Content -->
         <div class="container mt-4">

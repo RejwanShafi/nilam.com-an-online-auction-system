@@ -31,6 +31,13 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('auction_item_id')->constrained('auction_items')->onDelete('cascade');
+            $table->string('url'); // Storing the URL or path of the image
+            $table->timestamps();
+        });
     }
 
     public function down(): void
@@ -38,5 +45,6 @@ return new class extends Migration
         Schema::dropIfExists('auction_item_category');
         Schema::dropIfExists('auction_items');
         Schema::dropIfExists('categories');
+        Schema::dropIfExists('images');
     }
 };
