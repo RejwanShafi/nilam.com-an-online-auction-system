@@ -1,23 +1,54 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\HomeController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\AdminDashboardController;
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::delete('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Google login
+Route::get('/auth/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [App\Http\Controllers\GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Normal User dashboard
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified', 'user'])->name('dashboard');
 
-Route::get('/admin', function () {
-    return view('users');
+// Seller dashboard
+Route::get('/seller/dashboard', function () {
+    return view('seller.dashboard');
+})->middleware(['auth', 'verified', 'seller'])->name('seller.dashboard');
+
+// Admin dashbaard
+// Route::get('/admin/dashboard', function () {
+//     return view('admin.dashboard');
+// })->middleware(['auth', 'verified', 'admin'])->name('admin.dashboard');
+
+
+// Seller dashboard
+Route::get('/seller/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth', 'verified', 'seller'])->name('seller.dashboard');
+
+// Admin Dashboard
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth', 'verified', 'admin'])->name('admin.dashboard');
+Route::get('/admin/users', [AdminDashboardController::class, 'users'])->middleware(['auth', 'verified', 'admin'])->name('admin.users');
+Route::get('/admin/sellers', [AdminDashboardController::class, 'sellers'])->middleware(['auth', 'verified', 'admin'])->name('admin.sellers');
+Route::get('/admin/add', [AdminDashboardController::class, 'showAddAdminForm'])->middleware(['auth', 'verified', 'admin'])->name('admin.add');
+Route::post('/admin/register', [AdminDashboardController::class, 'registerAdmin'])->middleware(['auth', 'verified', 'admin'])->name('admin.register');
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
+require __DIR__.'/auth.php';
