@@ -27,8 +27,8 @@ return new class extends Migration
 
         Schema::create('auction_item_category', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('auction_item_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('auction_item_id')->constrained('auction_items')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
