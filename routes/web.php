@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\SellerDashboardController;
 use App\Http\Controllers\Auth\PasswordController;
 
 
@@ -35,7 +36,13 @@ Route::get('/seller/dashboard', function () {
 
 
 // Seller dashboard
-Route::get('/seller/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth', 'verified', 'seller'])->name('seller.dashboard');
+Route::get('/seller/dashboard', [SellerDashboardController::class, 'index'])->middleware(['auth', 'verified', 'seller'])->name('seller.dashboard');
+Route::get('/seller/auction-item/create', [SellerDashboardController::class, 'createAuctionItem'])->name('seller.createAuctionItem');
+Route::post('/seller/auction-item/store', [SellerDashboardController::class, 'storeAuctionItem'])->name('seller.storeAuctionItem');
+
+
+
+
 
 // Admin Dashboard
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth', 'verified', 'admin'])->name('admin.dashboard');
@@ -43,6 +50,7 @@ Route::get('/admin/users', [AdminDashboardController::class, 'users'])->middlewa
 Route::get('/admin/sellers', [AdminDashboardController::class, 'sellers'])->middleware(['auth', 'verified', 'admin'])->name('admin.sellers');
 Route::get('/admin/add', [AdminDashboardController::class, 'showAddAdminForm'])->middleware(['auth', 'verified', 'admin'])->name('admin.add');
 Route::post('/admin/register', [AdminDashboardController::class, 'registerAdmin'])->middleware(['auth', 'verified', 'admin'])->name('admin.register');
+
 
 
 
