@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,8 +16,15 @@ class AdminDashboardController extends Controller
         // return view('admin.dashboard');
         $admin = Auth::user();
 
-        
+
         return view('admin.dashboard', compact('admin'));
+    }
+
+    public function sellerDashboard()
+    {
+        $seller = Auth::user();  // Assuming the authenticated user is the seller
+
+        return view('seller.dashboard', compact('seller'));
     }
 
     public function users()
