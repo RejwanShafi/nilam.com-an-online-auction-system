@@ -54,4 +54,18 @@ Route::middleware('auth')->group(function () {
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 });
 
+use App\Http\Controllers\ItemController;
+
+// Route to show the auction items
+Route::get('/', [ItemController::class, 'index'])->name('items.index');
+
+// Route to show a specific item and allow bidding
+Route::get('/items/{id}', [ItemController::class, 'show'])->name('items.show');
+
+// Route to place a bid (POST request)
+Route::post('/items/{id}/bid', [ItemController::class, 'placeBid'])->middleware('auth')->name('items.bid');
+
+Route:: get('/connection', function(){
+    return view(connection);
+});
 require __DIR__.'/auth.php';
