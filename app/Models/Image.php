@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    use HasFactory;
-
-    protected $fillable = ['auction_item_id', 'url'];
-
-    // Define the relationship to the AuctionItem model
+    protected $fillable = ['url', 'auction_item_id'];
+    
     public function auctionItem()
     {
-        return $this->belongsTo(AuctionItem::class, 'auction_item_id');
+        return $this->belongsTo(AuctionItem::class);
     }
 }

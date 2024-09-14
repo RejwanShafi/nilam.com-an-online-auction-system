@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
+use App\Models\AuctionItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +17,15 @@ class AdminDashboardController extends Controller
         // return view('admin.dashboard');
         $admin = Auth::user();
 
-        
+
         return view('admin.dashboard', compact('admin'));
+    }
+
+    public function sellerDashboard()
+    {
+        $seller = Auth::user();  // Assuming the authenticated user is the seller
+
+        return view('seller.dashboard', compact('seller'));
     }
 
     public function users()
@@ -33,6 +42,13 @@ class AdminDashboardController extends Controller
         return view('admin.sellers', compact('sellers'));
     }
 
+    public function aucApprove()
+    {
+        // Fetch auction items with seller details
+        $auctionItems = AuctionItem::with('seller')->get(); // Eager load seller relationship
+
+        return view('admin.auc-status', compact('auctionItems'));
+    }
     public function showAddAdminForm()
     {
         return view('admin.add-admin');
