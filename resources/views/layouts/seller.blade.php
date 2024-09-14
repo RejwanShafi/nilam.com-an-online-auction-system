@@ -122,13 +122,16 @@
                     <a href="javascript:void(0);" class="nav-link" id="manageProductsToggle">Manage Products</a>
                     <ul class="nav flex-column ml-3" id="manageProductsDropdown" style="display: none;">
                         <li class="nav-item">
-                            <a href="{{ route('seller.createAuctionItem') }}" class="nav-link">Add New Product</a>
+                            <a href="{{ route('seller.createAuctionItem') }}"
+                        class="nav-link {{ request()->is('seller/auction-item/create') ? 'active' : '' }}">Add New Product</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Product Approval</a>
+                            <a href="{{ route('seller.items-waiting') }}"
+                            class="nav-link {{ request()->is('seller/waiting-approval') ? 'active' : '' }}">Products Waiting for Approval</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Sold Products</a>
+                            <a href="{{ route('seller.edit-items') }}"
+                            class="nav-link {{ request()->is('seller/edit-item-records') ? 'active' : '' }}">Edit Products</a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">Biddings</a>

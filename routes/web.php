@@ -41,8 +41,14 @@ Route::get('/seller/dashboard', function () {
 Route::get('/seller/dashboard', [SellerDashboardController::class, 'index'])->middleware(['auth', 'verified', 'seller'])->name('seller.dashboard');
 Route::get('/seller/auction-item/create', [SellerDashboardController::class, 'createAuctionItem'])->name('seller.createAuctionItem');
 Route::post('/seller/auction-item/store', [SellerDashboardController::class, 'storeAuctionItem'])->name('seller.storeAuctionItem');
+Route::get('/seller/waiting-approval', [SellerDashboardController::class, 'showwaiting'])->middleware(['auth', 'verified', 'seller'])->name('seller.items-waiting');
+Route::get('/seller/sold-item-records', [SellerDashboardController::class, 'soldItems'])->middleware(['auth', 'verified', 'seller'])->name('seller.sold-items');
+Route::get('/seller/edit-item-records', [SellerDashboardController::class, 'editItems'])->middleware(['auth', 'verified', 'seller'])->name('seller.edit-items');
+// Delete Auction Item
+Route::delete('/seller/auction/{id}/delete', [SellerDashboardController::class, 'delete'])->name('auction.delete');
 
-
+// Update Auction Item
+Route::put('/seller/auction/update', [SellerDashboardController::class, 'update'])->name('auction.update');
 
 
 

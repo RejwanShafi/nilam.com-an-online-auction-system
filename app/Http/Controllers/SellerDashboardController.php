@@ -25,6 +25,63 @@ class SellerDashboardController extends Controller
         return view('seller.dashboard', compact('seller', 'auctionedItemsCount', 'soldItemsCount'));
     }
 
+    public function showwaiting()
+    {
+        // Fetch auction items where status is 3 (waiting for approval)
+        $seller = Auth::user();
+
+        // Fetch auction items where status is 3 and seller_id is the current seller
+        $auctionwaitItems = AuctionItem::where('status', 3)->where('seller_id', $seller->id)->get();
+
+        return view('seller.items-waiting', compact('auctionwaitItems'));
+    }
+
+    public function editItems()
+    {
+        $seller = Auth::user(); // Get the current seller
+        $auctionItems = AuctionItem::where('status', 3)->where('seller_id', $seller->id)->get(); // Fetch only status 1 items
+
+        return view('seller.edit-items', compact('auctionItems'));
+    }
+
+    public function soldItems()
+    {
+        $seller = Auth::user(); // Get the current seller
+        $auctionItems = AuctionItem::where('status', 1)->where('seller_id', $seller->id)->get(); // Fetch only status 1 items
+
+        return view('seller.edit-items', compact('auctionItems'));
+    }
+
+    // Handle deletion of auction items
+    public function delete($id)
+    {
+        $auctionItem = AuctionItem::find($id);
+
+        if ($auctionItem && $auctionItem->seller_id == Auth::id()) {
+            $auctionItem->delete();
+            return redirect()->back()->with('success', 'Auction item deleted successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Auction item not found or not authorized!');
+    }
+
+    // Handle update of auction items
+    public function update(Request $request)
+    {
+        $auctionItem = AuctionItem::find($request->auction_id);
+
+        if ($auctionItem && $auctionItem->seller_id == Auth::id()) {
+            $auctionItem->title = $request->input('title');
+            $auctionItem->description = $request->input('description');
+            $auctionItem->starting_price = $request->input('starting_price');
+            $auctionItem->save();
+
+            return redirect()->back()->with('success', 'Auction item updated successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Auction item not found or not authorized!');
+    }
+
     public function createAuctionItem()
     {
         $categories = Category::all(); // Fetch all available categories
