@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SellerDashboardController;
 use App\Http\Controllers\AuctionManagementController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -20,6 +21,7 @@ Route::get('/', function () {
 // Google login
 Route::get('/auth/google', [App\Http\Controllers\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [App\Http\Controllers\GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
 
 // Normal User dashboard
 Route::get('/dashboard', function () {
@@ -39,8 +41,8 @@ Route::get('/seller/dashboard', function () {
 
 // Seller dashboard
 Route::get('/seller/dashboard', [SellerDashboardController::class, 'index'])->middleware(['auth', 'verified', 'seller'])->name('seller.dashboard');
-Route::get('/seller/auction-item/create', [SellerDashboardController::class, 'createAuctionItem'])->name('seller.createAuctionItem');
-Route::post('/seller/auction-item/store', [SellerDashboardController::class, 'storeAuctionItem'])->name('seller.storeAuctionItem');
+Route::get('/seller/auction-item/create', [SellerDashboardController::class, 'createAuctionItem'])->middleware(['auth', 'verified', 'seller'])->name('seller.createAuctionItem');
+Route::post('/seller/auction-item/store', [SellerDashboardController::class, 'storeAuctionItem'])->middleware(['auth', 'verified', 'seller'])->name('seller.storeAuctionItem');
 Route::get('/seller/waiting-approval', [SellerDashboardController::class, 'showwaiting'])->middleware(['auth', 'verified', 'seller'])->name('seller.items-waiting');
 Route::get('/seller/sold-item-records', [SellerDashboardController::class, 'soldItems'])->middleware(['auth', 'verified', 'seller'])->name('seller.sold-items');
 Route::get('/seller/edit-item-records', [SellerDashboardController::class, 'editItems'])->middleware(['auth', 'verified', 'seller'])->name('seller.edit-items');
