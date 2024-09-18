@@ -1,26 +1,29 @@
 @php
-    $roleType = Auth::user()->role;
-    $redirectUrl = 'dashboard';
+$roleType = Auth::user()->role;
+$redirectUrl = 'dashboard';
 
-    switch ($roleType){
-        # seller
-        case 1:
-            $redirectUrl='seller.dashboard';
-            break;
-        
-        # admin
-        case 2:
-            $redirectUrl="admin.dashboard";
-            break;
-        
-        default:
-            $redirectUrl = 'dashboard';
-            break;
+switch ($roleType){
+# seller
+case 1:
+$redirectUrl='seller.dashboard';
+break;
 
-    }
+# admin
+case 2:
+$redirectUrl="admin.dashboard";
+break;
+
+default:
+$redirectUrl = 'dashboard';
+break;
+
+}
 
 @endphp
 
+<style>
+
+</style>
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,14 +32,14 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route($redirectUrl) }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <img src="{{ asset('logo/nilam.png') }}" alt="New Logo" class="rounded-circle" style="width: 50px; height: 50px;">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route($redirectUrl)" :active="request()->routeIs($redirectUrl)">
-                        {{ __('Dashboard') }}
+                        {{ __('Nilam') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -47,9 +50,9 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             @if(Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar }}" alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
+                            <img src="{{ Auth::user()->avatar }}" alt="Profile Picture" style="width: 30px; height: 30px; border-radius: 50%;">
                             @else
-                                <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->name }}</div>
                             @endif
 
                             <div class="ms-1">
@@ -70,7 +73,7 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -116,7 +119,7 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                        onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

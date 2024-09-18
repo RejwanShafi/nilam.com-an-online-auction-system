@@ -124,9 +124,10 @@ class SellerDashboardController extends Controller
 
                     // Save the image path to the database
                     Image::create([
-                        'url' => '/storage/' . $imagePath,  // Store the URL to the image
+                        'url' => $imagePath,  // Correct: use the path as returned by the store() method
                         'auction_item_id' => $auctionItem->id,
                     ]);
+                    
                 }
             }
         }

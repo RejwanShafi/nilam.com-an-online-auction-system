@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->decimal('starting_price', 10, 2);
-            $table->decimal('current_bid', 10, 2)->nullable();
+            $table->decimal('starting_price', 14, 2);
+            $table->decimal('current_bid', 14, 2)->nullable();
             $table->dateTime('end_time');
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
