@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 // }
 class AuctionController extends Controller
 {
-    public function shop()
+    public function getallitem()
     {
         $auctionItems = AuctionItem::where('status', 2)
             ->with(['categories', 'images' => function ($query) {
@@ -27,7 +27,7 @@ class AuctionController extends Controller
             }])
             ->get();
 
-        return view('shop', compact('auctionItems'));
+        return view('all_items', compact('auctionItems'));
     }
     public function dashboard()
     {

@@ -184,7 +184,7 @@
             @endforeach
 
             <div class="col-md-25 text-center mt-4">
-                <a href="{{route('shop')}}" class="btn btn-primary" style="right: 20px; bottom: 20px; background-color: blue; color: white;"">
+                <a href="{{route('all_items')}}" class="btn btn-primary" style="right: 20px; bottom: 20px; background-color: blue; color: white;"">
                         Show All
                     </a>
                 </div>

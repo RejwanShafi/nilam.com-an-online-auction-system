@@ -12,6 +12,7 @@ use App\Http\Controllers\SellerDashboardController;
 use App\Http\Controllers\AuctionManagementController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::get('/', function () {
@@ -23,13 +24,14 @@ Route::get('/auth/google', [App\Http\Controllers\GoogleController::class, 'redir
 Route::get('/auth/google/callback', [App\Http\Controllers\GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 // Normal User dashboard
+
 Route::get('/dashboard', [AuctionController::class, 'dashboard'])->middleware(['auth', 'verified', 'user'])->name('dashboard');
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified', 'user'])->name('dashboard');
 
 // Auction item fetch trial
-Route::get('/shop', [AuctionController::class, 'shop'])->middleware(['auth', 'verified', 'user'])->name('shop');
+Route::get('/all-items', [AuctionController::class, 'getallitem'])->middleware(['auth', 'verified', 'user'])->name('all_items');
 
 
 
