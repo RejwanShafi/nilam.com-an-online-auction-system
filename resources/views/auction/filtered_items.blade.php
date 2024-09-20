@@ -2,10 +2,15 @@
 
 @section('content')
 <div class="container my-5">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
-        {{ __('All Available Auction Items') }}
+    <!-- Category Title -->
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">Items in
+        {{ __($category->name) }}
     </h2>
 
+    <!-- Horizontal Line -->
+    <div class="d-flex justify-content-center mt-2 mb-4">
+        <hr style="width: 100%; border-top: 2px solid #000;">
+    </div>
 
     <div class="row">
         @foreach ($auctionItems as $item)
@@ -21,7 +26,7 @@
                     @else
                     <img src="https://via.placeholder.com/400x200" class="card-img-top" alt="Placeholder" style="height: 200px; object-fit: cover;">
                     @endif
-                    <div class="card-body d-flex flex-column" style="height: 180px;">
+                    <div class="card-body d-flex flex-column" style="height: 150px;">
                         <h5 class="card-title">{{ $item->title }}</h5>
                         <p class="card-text">Starting Price: {{ number_format($item->starting_price, 2) }} Taka</p>
                         <div class="mt-auto">
@@ -38,9 +43,10 @@
         @endforeach
     </div>
 
-    <!-- Pagination -->
-    <div class="d-flex justify-content-center">
-        {{ $auctionItems->links() }}
+    @if($auctionItems->isEmpty())
+    <div class="text-center mt-5">
+        <p>No items found under this category.</p>
     </div>
+    @endif
 </div>
 @endsection
