@@ -55,53 +55,42 @@ class AuctionController extends Controller
         return view('auction.show', compact('auctionItem', 'recentItems', 'timeLeft', 'highestBid', 'isHighestBidder'));
     }
 
-    public function isAuctionEnded()
-    {
-        return now()->greaterThanOrEqualTo($this->end_time);
-    }
-    
-    public function isHighestBidder()
-    {
-        $highestBid = $this->BidRecords()->orderBy('amount', 'desc')->first();
-        return $highestBid && $highestBid->customer_id === auth()->id();
-    }
-    
-
     public function placeBid(Request $request)
-    {
-        $request->validate([
-            'bid_amount' => 'required|numeric|min:0',
-        ]);
+{
+    $request->validate([
+        'bid_amount' => 'required|numeric|min:0',
+    ]);
 
-        $auctionItem = AuctionItem::find($request->auction_item_id);
+    $auctionItem = AuctionItem::find($request->auction_item_id);
 
-        // Check if auction has ended
-        if ($auctionItem->isAuctionEnded()) {
-            return redirect()->back()->with('error', 'The auction has already ended. You cannot place a bid.');
-        }
-
-        // Check if bid amount is less than starting price
-        if ($request->bid_amount < $auctionItem->starting_price) {
-            return redirect()->back()->with('error', 'Bid amount must be higher than the starting price.');
-        }
-
-        // Check if bid amount is less than or equal to the current highest bid
-        $highestBid = $auctionItem->bidRecords()->max('amount');
-        if ($highestBid && $request->bid_amount <= $highestBid) {
-            return redirect()->back()->with('error', 'Bid amount must be higher than the current highest bid.');
-        }
-
-        // Save the bid in bid_records
-        BidRecord::create([
-            'auction_id' => $auctionItem->id,
-            'customer_id' => Auth::id(),
-            'amount' => $request->bid_amount,
-        ]);
-
-        // Update current bid in auction_items
-        $auctionItem->current_bid = $request->bid_amount;
-        $auctionItem->save();
-
-        return redirect()->back()->with('success', 'Bid placed successfully!');
+    // Check if auction has ended
+    if ($auctionItem->isAuctionEnded()) {
+        return redirect()->back()->with('error', 'The auction has already ended. You cannot place a bid.');
     }
+
+    // Check if bid amount is less than starting price
+    if ($request->bid_amount < $auctionItem->starting_price) {
+        return redirect()->back()->with('error', 'Bid amount must be higher than the starting price.');
+    }
+
+    // Check if bid amount is less than or equal to the current highest bid
+    $highestBid = $auctionItem->bidRecords()->max('amount');
+    if ($highestBid && $request->bid_amount <= $highestBid) {
+        return redirect()->back()->with('error', 'Bid amount must be higher than the current highest bid.');
+    }
+
+    // Save the bid in bid_records
+    BidRecord::create([
+        'auction_id' => $auctionItem->id,
+        'customer_id' => Auth::id(),
+        'amount' => $request->bid_amount,
+    ]);
+
+    // Update current bid in auction_items
+    $auctionItem->current_bid = $request->bid_amount;
+    $auctionItem->save();
+
+    return redirect()->back()->with('success', 'Bid placed successfully!');
+}
+    
 }

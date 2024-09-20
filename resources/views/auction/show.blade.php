@@ -1,6 +1,20 @@
 @extends('layouts.app2')
 
 @section('content')
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <div class="container mt-5">
     <div class="row">
         <!-- Left Section: Product Images -->
@@ -36,7 +50,7 @@
                 <h4 class="me-3 text-danger" style="line-height: 2;">Starting Price: {{ number_format($auctionItem->starting_price, 2) }}৳</h4>
             </div>
             <div class="d-flex align-items-center">
-                <h5 class="me-3 text-muted" style="line-height: 2;">Current Bid: {{ number_format($auctionItem->current_bid, 2) }}৳</h5>
+                <h5 class="me-3 text-muted" style="line-height: 2;">Current Bid: {{ number_format($auctionItem->current_bid ?? $auctionItem->current_bid ) }}৳</h5>
             </div>
 
             <!-- Seller Info -->
@@ -56,29 +70,43 @@
             </div>
 
             <!-- Time Left -->
-            @php
-            date_default_timezone_set('Asia/Dhaka'); // Set to Dhaka timezone (GMT +6)
-            $currentDate = \Carbon\Carbon::now();
-            $endDate = \Carbon\Carbon::parse($auctionItem->end_time);
-            $diff = $endDate->diff($currentDate);
-            @endphp
+            <p><strong>Time Left:</strong> {{ $timeLeft->d }} days, {{ $timeLeft->h }} hours, {{ $timeLeft->i }} minutes</p>
 
-            @if($auctionItem->isAuctionEnded())
-                <p class="text-danger"><strong>Time Left:</strong> The auction has ended.</p>
+            <!-- Buy Now / Bid Now -->
+            <div class="d-flex">
+                @if($auctionItem->isAuctionEnded())
                 @if($isHighestBidder)
-                    <p class="text-success">You won the auction! You can now buy the item.</p>
-                    <button class="btn btn-primary">Buy Now</button>
-                @else
-                    <p class="text-danger">The auction has ended. You are not the highest bidder.</p>
+                <button class="btn btn-primary">Buy Now</button>
                 @endif
-            @else
-                <p><strong>Time Left:</strong> {{ $diff->d }} days, {{ $diff->h }} hours, {{ $diff->i }} minutes</p>
-                <button class="btn btn-warning">Bid Now</button>
-            @endif
+                @else
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#bidModal">Bid Now</button>
+                @endif
+            </div>
         </div>
     </div>
 
-    <!-- Stylish Horizontal Line -->
+    <!-- Modal for placing a bid -->
+    <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('placeBid', $auctionItem->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bidModalLabel">Place Your Bid</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="itemTitle">Auction Item</label>
+                            <input type="text" class="form-control" value="{{ $auctionItem->title }}" disabled>
+                        </div>
+                        <div class="form-group mt-3"> <label for="bidAmount">Bid Amount</label> <input type="number" class="form-control" id="bidAmount" name="bid_amount" required placeholder="Enter your bid amount"> </div> <input type="hidden" name="auction_item_id" value="{{ $auctionItem->id }}">
+                    </div>
+                    <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="submit" class="btn btn-primary">Place Bid</button> </div>
+                </form>
+            </div>
+        </div>
+    </div> <!-- Stylish Horizontal Line -->
     <hr class="my-5" style="border-top: 3px solid #333;">
 
     <!-- Recent Auction Items -->
@@ -96,7 +124,7 @@
                         @endif
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $item->title }}</h5>
-                            <p class="card-text"style="color:red;">Starting Price: {{ number_format($item->starting_price, 2) }}৳</p>
+                            <p class="card-text" style="color:red;">Starting Price: {{ number_format($item->starting_price, 2) }}৳</p>
                         </div>
                     </div>
                 </a>
@@ -105,5 +133,4 @@
         </div>
     </div>
 </div>
-
 @endsection
