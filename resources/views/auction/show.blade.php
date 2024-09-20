@@ -34,10 +34,8 @@
             <h2 style="font-weight: bold; font-style: italic;">{{ $auctionItem->title }}</h2>
             <div class="d-flex align-items-center">
                 <h4 class="me-3 text-danger" style="line-height: 2;">Starting Price: {{ number_format($auctionItem->starting_price, 2) }}৳</h4>
-                <!-- <h5 class="me-3 text-muted">Current Bid: {{ number_format($auctionItem->current_bid, 2) }}৳</h5> -->
             </div>
             <div class="d-flex align-items-center">
-                <!-- <h4 class="me-3 text-danger">Starting Price: {{ number_format($auctionItem->starting_price, 2) }}৳</h4> -->
                 <h5 class="me-3 text-muted" style="line-height: 2;">Current Bid: {{ number_format($auctionItem->current_bid, 2) }}৳</h5>
             </div>
 
@@ -51,32 +49,39 @@
                 @endforeach
             </div>
 
-            <!-- Description with Line Spacing 2 -->
+            <!-- Description -->
             <div class="mb-3" style="line-height: 2;">
                 <h5>Description</h5>
                 <p>{{ $auctionItem->description }}</p>
             </div>
-            <!-- Remaining Time -->
+
+            <!-- Time Left -->
             @php
-            $currentDate = now();
-            $endDate = \Carbon\Carbon::parse($auctionItem->end_time); // Assuming 'end_time' is in your model
+            date_default_timezone_set('Asia/Dhaka'); // Set to Dhaka timezone (GMT +6)
+            $currentDate = \Carbon\Carbon::now();
+            $endDate = \Carbon\Carbon::parse($auctionItem->end_time);
             $diff = $endDate->diff($currentDate);
             @endphp
-            <p><strong>Time Left:</strong> {{ $diff->d }} days, {{ $diff->h }} hours</p>
 
-
-            <!-- Buy Now and Add to Cart Buttons -->
-            <div class="d-flex">
-                <button class="btn btn-primary me-2">Buy Now</button>
+            @if($auctionItem->isAuctionEnded())
+                <p class="text-danger"><strong>Time Left:</strong> The auction has ended.</p>
+                @if($isHighestBidder)
+                    <p class="text-success">You won the auction! You can now buy the item.</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                @else
+                    <p class="text-danger">The auction has ended. You are not the highest bidder.</p>
+                @endif
+            @else
+                <p><strong>Time Left:</strong> {{ $diff->d }} days, {{ $diff->h }} hours, {{ $diff->i }} minutes</p>
                 <button class="btn btn-warning">Bid Now</button>
-            </div>
+            @endif
         </div>
     </div>
 
     <!-- Stylish Horizontal Line -->
     <hr class="my-5" style="border-top: 3px solid #333;">
 
-    <!-- Display 5 Most Recent Auction Items -->
+    <!-- Recent Auction Items -->
     <div class="container mt-5">
         <h3 class="text-center mb-4">Recent Auction Items</h3>
         <div class="row">
@@ -100,6 +105,5 @@
         </div>
     </div>
 </div>
-
 
 @endsection

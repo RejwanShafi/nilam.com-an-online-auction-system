@@ -33,7 +33,9 @@ Route::get('/dashboard', [AuctionController::class, 'dashboard'])->middleware(['
 Route::get('/all-items', [AuctionController::class, 'getallitem'])->middleware(['auth', 'verified', 'user'])->name('all_items');
 Route::get('/item_details/{id}', [AuctionController::class, 'show'])->middleware(['auth', 'verified', 'user'])->name('auction.show');
 Route::get('/categories', [CategoryController::class, 'showByCategory'])->middleware(['auth', 'verified', 'user'])->name('categories.show');
-Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/search', [SearchController::class, 'search'])->middleware(['auth', 'verified', 'user'])->name('search');
+Route::post('/auction/{id}/place-bid', [AuctionController::class, 'placeBid'])->name('placeBid');
+
 
 
 // Seller dashboard

@@ -118,7 +118,7 @@
         
         <h1>Nilam: An Online Auction System</h1>
         <p>Welcome to Bangladesh’s Premier Online Auction Platform. Nilam is your gateway to discovering incredible deals through online auctions. Whether you're looking to buy or sell, our platform connects you with a wide range of products, from electronics to fashion, home goods, and more, all from the comfort of your home. Designed specifically for Bangladesh, Nilam empowers individuals and businesses to participate in a transparent, secure, and user-friendly auction experience. Bid confidently, knowing that each auction is handled with integrity and care. With Nilam, you can find unbeatable deals, rare items, and unique opportunities, all while joining a thriving community of buyers and sellers. Start bidding today and explore the future of auctions in Bangladesh with Nilam!</p>
-        <a href="/all-items" class="btn">Browse Auctions</a>
+        <a href="/dashboard" class="btn">Browse Auctions</a>
     </div>
     
 

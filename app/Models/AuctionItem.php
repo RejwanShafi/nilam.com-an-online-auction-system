@@ -23,4 +23,28 @@ class AuctionItem extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function bidRecords()
+    {
+        return $this->hasMany(BidRecord::class, 'auction_id');
+    }
+
+  
+    public function getHighestBidAttribute()
+    {
+        return $this->bidRecords()->max('amount');
+    }
+
+
+    public function isAuctionEnded()
+    {
+        return now()->greaterThanOrEqualTo($this->end_time);
+    }
+
+    
+    public function isHighestBidder()
+    {
+        $highestBid = $this->bidRecords()->orderBy('amount', 'desc')->first();
+        return $highestBid && $highestBid->user_id === auth()->id();
+    }
 }
