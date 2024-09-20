@@ -2,17 +2,17 @@
 
 @section('content')
 @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @endif
 
 @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @endif
 
 <div class="container mt-5">
@@ -70,13 +70,20 @@
             </div>
 
             <!-- Time Left -->
-            <p><strong>Time Left:</strong> {{ $timeLeft->d }} days, {{ $timeLeft->h }} hours, {{ $timeLeft->i }} minutes</p>
-
+            <p><strong>Time Left:</strong>
+                @if($auctionItem->isAuctionEnded())
+                0 days, 0 hours, 0 minutes (Auction Ended)
+                @else
+                {{ $timeLeft->d }} days, {{ $timeLeft->h }} hours, {{ $timeLeft->i }} minutes
+                @endif
+            </p>
             <!-- Buy Now / Bid Now -->
             <div class="d-flex">
                 @if($auctionItem->isAuctionEnded())
                 @if($isHighestBidder)
-                <button class="btn btn-primary">Buy Now</button>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#buyNowModal">Buy Now</button>
+                @else
+                <p class="text-danger">This auction has been won by someone else.</p>
                 @endif
                 @else
                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#bidModal">Bid Now</button>
@@ -106,7 +113,59 @@
                 </form>
             </div>
         </div>
-    </div> <!-- Stylish Horizontal Line -->
+    </div>
+    <div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="buyNowModalLabel">Buy Now</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('buyNow') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="auction_item_id" value="{{ $auctionItem->id }}">
+
+                        <!-- User Details -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" value="{{ Auth::user()->name }}" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{ Auth::user()->email }}" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" value="{{ Auth::user()->address }}" disabled>
+                        </div>
+
+                        <!-- Current Bid -->
+                        <div class="mb-3">
+                            <label for="current_bid" class="form-label">Current Bid</label>
+                            <input type="text" class="form-control" id="current_bid" value="{{ number_format($auctionItem->current_bid, 2) }}৳" disabled>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">Payment Method</label>
+                            <select name="payment_method" class="form-select" id="payment_method" required>
+                                <!-- <option value="bkash">Bkash</option> -->
+                                <option value="cash_on_delivery">Cash on Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm Purchase</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Stylish Horizontal Line -->
     <hr class="my-5" style="border-top: 3px solid #333;">
 
     <!-- Recent Auction Items -->

@@ -7,6 +7,9 @@ use App\Models\BidRecord;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon; 
+use Illuminate\Support\Str;
+use App\Models\Payment;
 
 
 class AuctionController extends Controller
@@ -39,20 +42,44 @@ class AuctionController extends Controller
     public function show($id)
     {
         $auctionItem = AuctionItem::with('images', 'categories', 'seller')->findOrFail($id);
-        $recentItems = AuctionItem::latest()->take(5)->get(); // Fetch 5 most recent items
+        $recentItems = AuctionItem::latest()->take(5)->get();
 
-        // Calculate remaining time
-        $currentDate = now();
-        $endDate = \Carbon\Carbon::parse($auctionItem->end_time);
-        $timeLeft = $endDate->diff($currentDate);
+        $timeLeft = $this->calculateTimeLeft($auctionItem->end_time);
+        $isHighestBidder = $this->isUserHighestBidder($auctionItem);
 
-        // Get the highest bid
-        $highestBid = $auctionItem->getHighestBidAttribute();
+        return view('auction.show', compact('auctionItem', 'recentItems', 'timeLeft', 'isHighestBidder'));
+    }
 
-        // Check if the current user is the highest bidder
-        $isHighestBidder = $auctionItem->isHighestBidder();
+    private function calculateTimeLeft($endTime)
+    {
+        $now = Carbon::now();
+        $end = Carbon::parse($endTime);
 
-        return view('auction.show', compact('auctionItem', 'recentItems', 'timeLeft', 'highestBid', 'isHighestBidder'));
+        if ($now->gt($end)) {
+            return (object)[
+                'd' => 0,
+                'h' => 0,
+                'i' => 0
+            ];
+        }
+
+        $diff = $end->diff($now);
+
+        return (object)[
+            'd' => $diff->d,
+            'h' => $diff->h,
+            'i' => $diff->i
+        ];
+    }
+
+    private function isUserHighestBidder($auctionItem)
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+
+        $highestBid = $auctionItem->bidRecords()->orderBy('amount', 'desc')->first();
+        return $highestBid && $highestBid->customer_id === Auth::id();
     }
 
     public function placeBid(Request $request)
@@ -91,6 +118,35 @@ class AuctionController extends Controller
     $auctionItem->save();
 
     return redirect()->back()->with('success', 'Bid placed successfully!');
+}
+public function buyNow(Request $request)
+{
+    $request->validate([
+        'payment_method' => 'required',
+        'auction_item_id' => 'required|exists:auction_items,id',
+    ]);
+
+    $auctionItem = AuctionItem::findOrFail($request->auction_item_id);
+
+    // Handle payment processing logic
+    if ($request->payment_method === 'cash_on_delivery') {
+        $token = Str::random(15); // Generate random token
+    } else {
+        // Other payment methods can be handled here (e.g., Bkash)
+        $token = null;
+    }
+
+    // Save payment record
+    Payment::create([
+        'user_id' => Auth::id(),
+        'auction_id' => $auctionItem->id,
+        'amount' => $auctionItem->current_bid,
+        'payment_method' => $request->payment_method,
+        'token' => $token,
+        'status' => 'pending', // Mark as pending initially
+    ]);
+
+    return redirect()->back()->with('success', 'Purchase successful! Check your transactions for details.');
 }
     
 }

@@ -40,7 +40,7 @@ class AuctionItem extends Model
     {
         return now()->greaterThanOrEqualTo($this->end_time);
     }
-
+    
     
     public function isHighestBidder()
     {
