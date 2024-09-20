@@ -13,12 +13,36 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <style>
+            /* Custom style for the logo */
+            .logo-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .logo-container img {
+                width: 80px; /* Adjust the size of the logo here */
+                height: 80px;
+                border-radius: 50%; /* Makes the image circular */
+                object-fit: cover;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+            }
+
+            /* Gray gradient background */
+            body {
+                background: linear-gradient(135deg, #e0e0e0, #b0b0b0);
+                /* Adjust the angle and colors as needed */
+            }
+        </style>
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+            <div class="logo-container">
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <img src="{{ asset('logo/nilam.png') }}" alt="Nilam Logo">
                 </a>
             </div>
 

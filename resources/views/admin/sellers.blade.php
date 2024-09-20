@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@section('title', 'Seller Management')
 @section('content')
     <div class="container">
         <h2>All sellers</h2>
