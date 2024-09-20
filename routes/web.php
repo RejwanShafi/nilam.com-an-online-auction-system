@@ -13,6 +13,7 @@ use App\Http\Controllers\AuctionManagementController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SearchController;
 
 
 Route::get('/', function () {
@@ -32,6 +33,7 @@ Route::get('/dashboard', [AuctionController::class, 'dashboard'])->middleware(['
 Route::get('/all-items', [AuctionController::class, 'getallitem'])->middleware(['auth', 'verified', 'user'])->name('all_items');
 Route::get('/item_details/{id}', [AuctionController::class, 'show'])->middleware(['auth', 'verified', 'user'])->name('auction.show');
 Route::get('/categories', [CategoryController::class, 'showByCategory'])->middleware(['auth', 'verified', 'user'])->name('categories.show');
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 
 // Seller dashboard

@@ -44,16 +44,6 @@
     </x-slot>
 
     <div class="main-content">
-        <!-- Search Bar -->
-        <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-                <form class="d-flex me-auto w-100">
-                    <input class="form-control me-2 form-control-search" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary btn-search" type="submit">Search</button>
-                </form>
-            </div>
-        </nav>
-
         <div class="container my-5">
             <div class="row">
                 <!-- Loop through categories and display each category in a box -->
