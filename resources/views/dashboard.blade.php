@@ -4,6 +4,7 @@
         padding: 20px;
         border-radius: 10px;
         transition: transform 0.2s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a box shadow for a raised look */
     }
 
     .featured-category:hover {
@@ -28,8 +29,12 @@
         /* Icon size inside the circle */
         width: auto;
     }
-    
+
+    .card-text {
+        color: red;
+    }
 </style>
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
@@ -39,7 +44,7 @@
     </x-slot>
 
     <div class="main-content">
-        <!-- Serach Bar -->
+        <!-- Search Bar -->
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <form class="d-flex me-auto w-100">
@@ -51,107 +56,19 @@
 
         <div class="container my-5">
             <div class="row">
-                <!-- First Row of Categories (6 items) -->
+                <!-- Loop through categories and display each category in a box -->
+                @foreach($categories as $category)
                 <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/car.png') }}" alt="Vehicle">
+                    <a href="{{ route('categories.show', ['category' => $category->name]) }}" class="text-decoration-none">
+                        <div class="featured-category">
+                            <div class="icon-circle">
+                                <img src="{{ asset('logo/' . strtolower($category->name) . '.png') }}" alt="{{ $category->name }}">
+                            </div>
+                            <p>{{ $category->name }}</p>
                         </div>
-                        <p>Vehicle</p>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/books.png') }}" alt="Book">
-                        </div>
-                        <p>Book</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/canvas.png') }}" alt="Painting">
-                        </div>
-                        <p>Painting</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/sculpture.png') }}" alt="Sculpture">
-                        </div>
-                        <p>Sculpture</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/ruby.png') }}" alt="Gemstone">
-                        </div>
-                        <p>Gemstone</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/necklace.png') }}" alt="Jewellery">
-                        </div>
-                        <p>Jewellery</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Second Row of Categories (6 items) -->
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/sofa.png') }}" alt="Furniture">
-                        </div>
-                        <p>Furniture</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/collectible.png') }}" alt="Collectibles">
-                        </div>
-                        <p>Collectibles</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/apartment.png') }}" alt="Real Estate">
-                        </div>
-                        <p>Real Estate</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/cloth.png') }}" alt="Cloth">
-                        </div>
-                        <p>Cloth</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/tablet.png') }}" alt="Technology">
-                        </div>
-                        <p>Technology</p>
-                    </div>
-                </div>
-                <div class="col-md-2 text-center mb-4">
-                    <div class="featured-category">
-                        <div class="icon-circle">
-                            <img src="{{ asset('logo/wrist-watch.png') }}" alt="Watch">
-                        </div>
-                        <p>Watch</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -164,30 +81,31 @@
         <div class="row">
             @foreach ($auctionItems as $item)
             <div class="col-md-4">
-                <div class="card h-100"> <!-- Ensure uniform height for the card -->
-                    @if($item->images->isNotEmpty())
-                    <img src="{{ asset('storage/' . $item->images->first()->url) }}" class="card-img-top" style="height: 250px; object-fit: cover;" alt="{{ $item->title }}">
-                    @else
-                    <img src="https://via.placeholder.com/250" class="card-img-top" style="height: 250px; object-fit: cover;" alt="No Image">
-                    @endif
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ $item->title }}</h5>
-                        <p class="card-text">Starting Price: {{ number_format($item->starting_price, 2) }} taka</p>
-                        <p class="mt-auto">
-                            @foreach($item->categories as $category)
-                            <span class="badge bg-primary">{{ $category->name }}</span>
-                            @endforeach
-                        </p>
+                <a href="{{ url('/item_details/' . $item->id) }}" class="text-decoration-none">
+                    <div class="card h-100"> <!-- Ensure uniform height for the card -->
+                        @if($item->images->isNotEmpty())
+                        <img src="{{ asset('storage/' . $item->images->first()->url) }}" class="card-img-top" style="height: 250px; object-fit: cover;" alt="{{ $item->title }}">
+                        @else
+                        <img src="https://via.placeholder.com/250" class="card-img-top" style="height: 250px; object-fit: cover;" alt="No Image">
+                        @endif
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ $item->title }}</h5>
+                            <p class="card-text">Starting Price: {{ number_format($item->starting_price, 2) }} taka</p>
+                            <p class="mt-auto">
+                                @foreach($item->categories as $category)
+                                <span class="badge bg-primary">{{ $category->name }}</span>
+                                @endforeach
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             @endforeach
 
             <div class="col-md-25 text-center mt-4">
-                <a href="{{route('all_items')}}" class="btn btn-primary" style="right: 20px; bottom: 20px; background-color: blue; color: white;"">
-                        Show All
-                    </a>
-                </div>
+                <a href="{{route('all_items')}}" class="btn btn-primary" style="right: 20px; bottom: 20px; background-color: blue; color: white;">
+                    Show All
+                </a>
             </div>
         </div>
     </div>

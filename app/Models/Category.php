@@ -11,6 +11,6 @@ class Category extends Model
     
     public function auctionItems()
     {
-        return $this->belongsToMany(AuctionItem::class);
+        return $this->belongsToMany(AuctionItem::class,'auction_item_category');
     }
 }
