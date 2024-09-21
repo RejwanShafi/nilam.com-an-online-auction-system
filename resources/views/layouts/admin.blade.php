@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Panel')</title> 
+    <title>@yield('title', 'Admin Panel')</title>
 
     <link rel="icon" href="{{ asset('logo/nilam.png') }}" type="image/png">
 
     <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7ie2D44Nyh/a6xoXmj8lztF5dY3Nck1BQHs" crossorigin="anonymous">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS for Sidebar -->
     <style>
@@ -137,14 +140,19 @@
                     <ul class="nav flex-column ml-3" id="manageProductsDropdown" style="display: none;">
                         <li class="nav-item">
                             <a href="{{ route('admin.auc-approve') }}"
-                        class="nav-link {{ request()->is('admin/auction-approve') ? 'active' : '' }}">Auction Approval</a>
+                                class="nav-link {{ request()->is('admin/auction-approve') ? 'active' : '' }}">Auction Approval</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.auc-status') }}"
-                        class="nav-link {{ request()->is('admin/auction-status') ? 'active' : '' }}">Auction Status</a>
+                                class="nav-link {{ request()->is('admin/auction-status') ? 'active' : '' }}">Auction Status</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Biddings</a>
+                        <a href="{{ route('admin.bids') }}"
+                        class="nav-link {{ request()->is('admin/bids') ? 'active' : '' }}">Current Items Biddings</a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="{{ route('admin.payment-approval') }}"
+                        class="nav-link {{ request()->is('admin/payment-approval') ? 'active' : '' }}">Payment Approval</a>
                         </li>
                     </ul>
                 </li>
@@ -163,15 +171,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Top Navigation Bar -->
-            <!-- <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-                <form class="d-flex me-auto">
-                    <input class="form-control me-2 form-control-search" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary btn-search" type="submit">Search</button>
-                </form>
-            </div>
-        </nav> -->
+
 
             <!-- Main Dashboard Content -->
             <div class="container mt-4">

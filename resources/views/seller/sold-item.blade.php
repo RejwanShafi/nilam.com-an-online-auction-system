@@ -42,125 +42,45 @@
 </style>
 @endsection
 
+
 @section('content')
-    <div class="container">
-        <h2>Manage Your Auction Items</h2>
-        <div class="box">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Starting Price</th>
-                        <th>Current Bid</th>
-                        <th>Status</th>
-                        {{-- <th>Actions</th> --}}
-                    </tr>
-                </thead>
-                <tbody>
-                    @if ($auctionItems->isNotEmpty())
-                        @foreach ($auctionItems as $auctionItem)
+<div class="container">
+    <h2>Sold Auction Items</h2>
+    <div class="box">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item Title</th>
+                    <th>Starting Price</th>
+                    <th>Current Bid</th>
+                    <th>Bidder Name</th>
+                    <th>Seller Name</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ($auctionItems->isNotEmpty())
+                    @foreach ($auctionItems as $auctionItem)
+                        @foreach ($auctionItem->bidRecords as $bid)
                             <tr>
                                 <td>{{ $auctionItem->id }}</td>
                                 <td>{{ $auctionItem->title }}</td>
-                                <td>{{ $auctionItem->starting_price }}</td>
-                                <td>{{ $auctionItem->current_bid }}</td>
-                                <td>
-                                    @if ($auctionItem->status == 1)
-                                        <button class="btn" disabled style="background-color: #83eb78; color: #83eb78;">Sold</button>
-                                    @endif
-                                </td>
-                                {{-- <td>
-                                    <!-- Edit Button -->
-                                    <button class="btn btn-primary edit-btn" data-id="{{ $auctionItem->id }}" data-title="{{ $auctionItem->title }}" data-description="{{ $auctionItem->description }}" data-price="{{ $auctionItem->starting_price }}">Edit</button>
-                                    
-                                    <!-- Delete Button -->
-                                    <form action="{{ route('auction.delete', $auctionItem->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                    </form>
-                                </td> --}}
+                                <td>{{ number_format($auctionItem->starting_price, 2) }}৳</td>
+                                <td>{{ number_format($bid->amount, 2) }}৳</td>
+                                <td>{{ $bid->bidder ? $bid->bidder->name : 'N/A' }}</td>
+                                <td>{{ $auctionItem->seller ? $auctionItem->seller->name : 'N/A' }}</td>
+                                <td>{{ $auctionItem->payment ? $auctionItem->payment->status : 'Pending' }}</td>
                             </tr>
                         @endforeach
-                    @else
-                        <tr>
-                            <td colspan="6">No auction items found.</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
-        </div>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="7">No sold items found for this seller.</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
     </div>
-
-    {{-- <!-- Modal for Editing Auction Item -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Edit Auction Item</h2>
-            <form id="editForm" method="POST" action="{{ route('auction.update') }}">
-                @csrf
-                @method('PUT')
-
-                <input type="hidden" name="auction_id" id="auctionId">
-
-                <div class="form-group">
-                    <label for="editTitle">Title</label>
-                    <input type="text" name="title" id="editTitle" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="editDescription">Description</label>
-                    <textarea name="description" id="editDescription" class="form-control" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="editPrice">Starting Price</label>
-                    <input type="number" name="starting_price" id="editPrice" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn btn-success">Update</button>
-            </form>
-        </div>
-    </div> --}}
+</div>
 @endsection
-{{-- 
-@section('scripts')
-<script>
-    // Get the modal
-    var modal = document.getElementById("editModal");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the Edit button, open the modal
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.onclick = function() {
-            var auctionId = this.getAttribute('data-id');
-            var title = this.getAttribute('data-title');
-            var description = this.getAttribute('data-description');
-            var price = this.getAttribute('data-price');
-
-            // Set the values in the form
-            document.getElementById('auctionId').value = auctionId;
-            document.getElementById('editTitle').value = title;
-            document.getElementById('editDescription').value = description;
-            document.getElementById('editPrice').value = price;
-
-            modal.style.display = "block";
-        };
-    });
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-</script>
-@endsection --}}

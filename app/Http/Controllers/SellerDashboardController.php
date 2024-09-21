@@ -46,10 +46,36 @@ class SellerDashboardController extends Controller
 
     public function soldItems()
     {
-        $seller = Auth::user(); // Get the current seller
-        $auctionItems = AuctionItem::where('status', 1)->where('seller_id', $seller->id)->get(); // Fetch only status 1 items
+        // Get the currently logged-in seller's ID
+        $sellerId = Auth::id();
 
-        return view('seller.edit-items', compact('auctionItems'));
+        // Fetch auction items where status is 1 and seller_id is the current seller's ID
+        $auctionItems = AuctionItem::where('status', 1)
+            ->where('seller_id', $sellerId)
+            ->with(['bidRecords.bidder', 'seller', 'payment'])
+            ->get();
+        $itemsCount = $auctionItems->count();
+
+        // Return both the auction items and the count to the view
+        return view('seller.sold-item', compact('auctionItems', 'itemsCount'));
+    }
+
+    public function biddings()
+    {
+        // Get the currently logged-in seller's ID
+        $sellerId = Auth::id();
+
+        // Fetch auction items where status is 1 or 2 and seller_id is the current seller's ID
+        $auctionItems = AuctionItem::whereIn('status', [2])
+            ->where('seller_id', $sellerId)
+            ->with(['bidRecords.bidder', 'seller', 'payment']) // Eager load relationships
+            ->get();
+
+        // Get the count of auction items
+        $itemsCount = $auctionItems->count();
+
+        // Return both the auction items and the count to the view
+        return view('seller.biddings', compact('auctionItems', 'itemsCount'));
     }
 
     // Handle deletion of auction items
@@ -89,7 +115,6 @@ class SellerDashboardController extends Controller
     }
 
     public function storeAuctionItem(Request $request)
-    
     {
         // Validate the form inputs
         $request->validate([
@@ -127,7 +152,7 @@ class SellerDashboardController extends Controller
                         'url' => $imagePath,  // Correct: use the path as returned by the store() method
                         'auction_item_id' => $auctionItem->id,
                     ]);
-                    
+
                 }
             }
         }

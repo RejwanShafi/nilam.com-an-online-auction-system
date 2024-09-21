@@ -56,6 +56,17 @@
         .input-focused {
             box-shadow: 0 0 0 0.25rem rgba(58, 132, 255, 0.25);
         }
+
+        .btn-google {
+            background-color: #db4437;
+            color: white;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-google:hover {
+            background-color: #c33d2f;
+        }
     </style>
 
     <div class="container mt-5 d-flex justify-content-center">
@@ -110,6 +121,13 @@
                     <button type="submit" class="btn btn-primary px-4">Login</button>
                 </div>
             </form>
+
+            <!-- Google Login Button -->
+            <div class="text-center mt-4">
+                <a href="{{ route('auth.google') }}" class="btn btn-google w-100">
+                    <i class="fab fa-google me-2"></i> {{ __('Login with Google') }}
+                </a>
+            </div>
 
             <div class="text-center mt-4">
                 <p>Don't have an account? <a href="{{ route('register') }}" class="text-decoration-none underline-link">Register</a></p>

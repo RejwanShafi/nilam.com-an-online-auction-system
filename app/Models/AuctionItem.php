@@ -29,7 +29,8 @@ class AuctionItem extends Model
         return $this->hasMany(BidRecord::class, 'auction_id');
     }
 
-  
+    
+
     public function getHighestBidAttribute()
     {
         return $this->bidRecords()->max('amount');
@@ -40,11 +41,15 @@ class AuctionItem extends Model
     {
         return now()->greaterThanOrEqualTo($this->end_time);
     }
-    
-    
+
+
     public function isHighestBidder()
     {
         $highestBid = $this->bidRecords()->orderBy('amount', 'desc')->first();
         return $highestBid && $highestBid->user_id === auth()->id();
+    }
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'auction_id');
     }
 }

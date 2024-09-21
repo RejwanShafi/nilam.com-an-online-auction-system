@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Profile</title>
+    <link rel="icon" href="{{ asset('logo/nilam.png') }}" type="image/png">
 
     <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -134,7 +135,12 @@
                             class="nav-link {{ request()->is('seller/edit-item-records') ? 'active' : '' }}">Edit Products</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Biddings</a>
+                            <a href="{{ route('seller.sold-item') }}"
+                            class="nav-link {{ request()->is('seller/sold-item-records') ? 'active' : '' }}">Show Shopped Items </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('seller.biddings') }}"
+                            class="nav-link {{ request()->is('seller/bidding-items') ? 'active' : '' }}">Show Active Biddings </a>
                         </li>
                     </ul>
                 </li>

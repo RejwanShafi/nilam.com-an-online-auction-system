@@ -146,6 +146,8 @@ public function buyNow(Request $request)
         'status' => 'pending', // Mark as pending initially
     ]);
 
+    $auctionItem->update(['status' => 1]);
+    
     return redirect()->back()->with('success', 'Purchase successful! Check your transactions for details.');
 }
     

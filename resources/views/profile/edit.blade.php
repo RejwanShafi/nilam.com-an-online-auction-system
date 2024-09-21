@@ -7,6 +7,7 @@
 
     <div class="py-12">
         <div class="container mx-auto">
+            
             <div class="row g-4">
                 <!-- Profile Information Section -->
                 <div class="col-lg-6 col-md-12">

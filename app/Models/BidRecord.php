@@ -11,13 +11,22 @@ class BidRecord extends Model
 
     protected $fillable = ['auction_id', 'customer_id', 'amount'];
 
-    public function auctionItem()
-    {
-        return $this->belongsTo(AuctionItem::class);
-    }
+    public function bidder()
+{
+    return $this->belongsTo(User::class, 'customer_id');
+}
+
+public function auctionItem()
+{
+    return $this->belongsTo(AuctionItem::class, 'auction_id');
+}
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    // App/Models/BidRecord.php
+
+
 }

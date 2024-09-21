@@ -21,21 +21,61 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function update(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        $user = Auth::user();
+
+        // Update username and address
+        $user->username = $request->input('username');
+        $user->address = $request->input('address');  // Add this
+
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            $avatarName = time() . '.' . $request->avatar->extension();
+            $request->avatar->storeAs('avatars', $avatarName, 'public');
+            $user->avatar = $avatarName;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('status', 'profile-updated');
+    }
+
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updateProfileInformation(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $request->validate([
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . auth()->id()],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5120'], // Validation for image
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = auth()->user();
+
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
+            $avatar->storeAs('public/avatars', $avatarName); // Store in 'public/avatars'
+
+            // Update avatar in the user table
+            $user->avatar = $avatarName;
         }
 
-        $request->user()->save();
+        // Update username
+        $user->username = $request->username;
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->back()->with('status', 'Profile updated successfully!');
     }
+
 
     /**
      * Delete the user's account.
