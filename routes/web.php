@@ -36,6 +36,10 @@ Route::get('/transactions', [TransactionController::class, 'index'])->name('tran
 
 Route::post('/auction/confirm-purchase/{id}', [TransactionController::class, 'confirmPurchase'])->name('auction.confirmPurchase');
 
+// route to become a seller
+Route::post('/become-seller', [ProfileController::class, 'becomeSeller'])->name('become-seller');
+
+
 
 
 

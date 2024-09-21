@@ -83,6 +83,12 @@ break;
                         @auth
                         <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Update Profile</a></li>
                         <li><a class="dropdown-item" href="{{ route('transactions') }}">Your Transactions</a></li>
+                        @if (Auth::check() && Auth::user()->role !== 1) <!-- Show "Become a Seller" only if the user is not a seller -->
+                        <form method="POST" action="{{ route('become-seller') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-warning">Become a Seller</button>
+                        </form>
+                        @endif
                         <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

@@ -19,7 +19,7 @@ class SellerDashboardController extends Controller
         $auctionedItemsCount = $seller->auctionItems()->count();
 
         // Assuming 'status' or 'is_sold' indicates whether an item is sold
-        $soldItemsCount = $seller->auctionItems()->where('status', 'sold')->count();
+        $soldItemsCount = $seller->auctionItems()->where('status', '1')->count();
 
         return view('seller.dashboard', compact('seller', 'auctionedItemsCount', 'soldItemsCount'));
     }

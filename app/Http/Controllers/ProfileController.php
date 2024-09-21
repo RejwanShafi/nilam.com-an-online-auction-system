@@ -97,4 +97,15 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+    public function becomeSeller(Request $request)
+    {
+        // Get the currently logged-in user
+        $user = Auth::user();
+
+        $user->role = 1;
+        $user->save();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'You are now a seller!');
+    }
 }
